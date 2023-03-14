@@ -7,8 +7,7 @@ def error(gen,dec): # 오차 define
 	return abs(gen-dec)/gen*100
 
 # variable = reconstruction을 위해서 가져올 field 종류, variable2 = gen level 에서 가져올 field 종류
-variable = ['Electron.PT', 'Electron.Eta', 'Electron.Phi', 'MissingET.MET', 'MissingET.Phi', 'Jet.PT']
-variable2 = ['Particle.PID','Particle.PT','Particle.Phi']
+variable = ['Electron.PT', 'Electron.Eta', 'Electron.Phi', 'MissingET.MET', 'MissingET.Phi', 'Jet.PT','Particle.PID','Particle.PT','Particle.Phi']
 
 mask = {
 	# dictionary 형태로 mask를 정의
@@ -18,7 +17,6 @@ mask = {
 	'Electron_Pt_first':  lambda data: ak.num(data['Electron.PT'] [data['Electron.PT'] > 25]) == 1, 
 	'Electron_Pt_second': lambda data: ak.num(data['Electron.PT'] [data['Electron.PT'] > 50]) == 1,
 	'Electron_Eta':       lambda data: ak.num(data['Electron.Eta'][abs(data['Electron.Eta']) < 2.5]) == 1, # 추후 수정할 예정 
-
 	'MET':                lambda data: ak.flatten(data['MissingET.MET']) > 50,
 	'Jet_number':         lambda data: ak.num(data['Jet.PT']) < 12,
 
