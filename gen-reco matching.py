@@ -44,32 +44,5 @@ for i in [6000]:              # W' 의 질량에 대한 loop
 				globals()['gen_%s_%s_%s'%(i,j,k)] =  globals()['gen_%s_%s_%s'%(i,j,k)][mask[m](globals()['dec_%s_%s_%s'%(i,j,k)])] 
 				globals()['dec_%s_%s_%s'%(i,j,k)] =  globals()['dec_%s_%s_%s'%(i,j,k)][mask[m](globals()['dec_%s_%s_%s'%(i,j,k)])]
 
-			# 먼저 reco level W' 질량을 구하고,
-
-			# reconstructed W' mass (np.sqrt(2*ept*met(1-cos(dphi))))
+			# reconstruct mass
 			globals()['wmt_file_%s_%s_%s'%(i,j,k)] = np.sqrt(2*globals()['dec_%s_%s_%s'%(i,j,k)]['Electron.PT']*globals()['dec_%s_%s_%s'%(i,j,k)]['MissingET.MET']*(1 - np.cos((globals()['dec_%s_%s_%s'%(i,j,k)]['Electron.Phi']-globals()['dec_%s_%s_%s'%(i,j,k)]['MissingET.Phi']))))
-
-			# gen electron, neutrino pt
-			globals()['gen_electron.pt_%s_%s_%s'%(i,j,k)] = globals()['gen_%s_%s_%s'%(i,j,k)]['Particle.PT'][abs(globals()['gen_%s_%s_%s'%(i,j,k)]['Particle.PID']) == 11]
-			globals()['gen_neutrino.pt_%s_%s_%s'%(i,j,k)] = globals()['gen_%s_%s_%s'%(i,j,k)]['Particle.PT'][abs(globals()['gen_%s_%s_%s'%(i,j,k)]['Particle.PID']) == 12]
-
-			# gen electron, neutrino phi
-			globals()['gen_electron.phi_%s_%s_%s'%(i,j,k)] = globals()['gen_%s_%s_%s'%(i,j,k)]['Particle.Phi'][abs(globals()['gen_%s_%s_%s'%(i,j,k)]['Particle.PID']) == 11]
-			globals()['gen_neutrino.phi_%s_%s_%s'%(i,j,k)] = globals()['gen_%s_%s_%s'%(i,j,k)]['Particle.Phi'][abs(globals()['gen_%s_%s_%s'%(i,j,k)]['Particle.PID']) == 12]
-
-			# gen level W mass (np.sqrt(2*ept*met(1-cos(dphi))))
-			globals()['gen_wmt_%s_%s_%s'%(i,j,k)] = np.sqrt(2*globals()['gen_electron.pt_%s_%s_%s'%(i,j,k)]*globals()['gen_neutrino.pt_%s_%s_%s'%(i,j,k)]*(1 - np.cos((globals()['gen_electron.phi_%s_%s_%s'%(i,j,k)]-globals()['gen_neutrino.phi_%s_%s_%s'%(i,j,k)]))))
-
-			# reco 과 gen level array 의 길이가 같은지 확인
-			print(len(globals()['gen_wmt_%s_%s_%s'%(i,j,k)]))
-			print(len(globals()['wmt_file_%s_%s_%s'%(i,j,k)]))
-			print(error(globals()['gen_wmt_%s_%s_%s'%(i,j,k)],globals()['wmt_file_%s_%s_%s'%(i,j,k)]))
-
-			# error의 평균,최대,최소치 확인
-			MEAN = np.mean(error(globals()['gen_wmt_%s_%s_%s'%(i,j,k)],globals()['wmt_file_%s_%s_%s'%(i,j,k)]))
-			MAX = np.max(error(globals()['gen_wmt_%s_%s_%s'%(i,j,k)],globals()['wmt_file_%s_%s_%s'%(i,j,k)]))
-			MIN =np.min(error(globals()['gen_wmt_%s_%s_%s'%(i,j,k)],globals()['wmt_file_%s_%s_%s'%(i,j,k)]))
-
-			# 배열 저장
-			np.save('gen_electron.pt_%s_%s_%s'%(i,j,k),ak.to_numpy(globals()['gen_electron.pt_%s_%s_%s'%(i,j,k)]))
-			np.save('dec_electron.pt_%s_%s_%s'%(i,j,k),ak.to_numpy(globals()['dec_%s_%s_%s'%(i,j,k)]['Electron.PT']))
