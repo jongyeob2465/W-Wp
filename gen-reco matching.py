@@ -31,15 +31,13 @@ for i in [6000]:              # W' 의 질량에 대한 loop
 
 			# load root file
 			globals()['dec_%s_%s_%s'%(i,j,k)] = up.lazy("/x6/cykim/condor/WP/Delphes_cms/condorDelpyOut/Delphes_%s_%s_%s"%(i,j,k) + ".root",branches=variable)
-			globals()['gen_%s_%s_%s'%(i,j,k)] = up.lazy("/x6/cykim/condor/WP/KL_root/KL%s_%s_%s"%(i,j,k) + ".root",branches=variable2)
 
 			print("open root file, mass : %s, coupling : %s, number : %s"%(i,j,k))
 
 			# apply mask
 			for m in mask.keys(): # mask를 gen level, detector level에 모두 적용. 모든 컷은 event 에 대해서 적용되므로, detector에 대한 cut을 gen level에 적용 가능.
-				if m == 'Jet_number': # 해당 mask를 적용하기 직전에 jet number 저장
+				if m == 'Jet_number': # 해당 mask를 적용하기 전에 jet multiplicity 저장
 					np.save('jetnumber_%s%s%s'%(i,j,k),ak.to_numpy(ak.num(globals()['dec_%s_%s_%s'%(i,j,k)]['Jet.PT'])))
-				globals()['gen_%s_%s_%s'%(i,j,k)] =  globals()['gen_%s_%s_%s'%(i,j,k)][mask[m](globals()['dec_%s_%s_%s'%(i,j,k)])] 
 				globals()['dec_%s_%s_%s'%(i,j,k)] =  globals()['dec_%s_%s_%s'%(i,j,k)][mask[m](globals()['dec_%s_%s_%s'%(i,j,k)])]
 
 			# reconstruct mass
